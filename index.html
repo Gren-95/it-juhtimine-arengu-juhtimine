@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arengu juhtimine — IT juhtimise head tavad koolis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    .slide { display: none; animation: fadeIn 0.35s ease; }
+    .slide.active { display: flex; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(24px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    #script-panel {
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    #script-panel.open {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-gray-950 overflow-hidden h-screen select-none">
+
+  <!-- Top progress bar -->
+  <div class="fixed top-0 left-0 w-full h-1 bg-gray-800 z-50">
+    <div id="progress" class="h-full bg-[#3CBFB8] transition-all duration-400" style="width:5%"></div>
+  </div>
+
+  <!-- Script panel (slides in from right) -->
+  <div id="script-panel" class="fixed top-1 right-0 bottom-14 w-96 bg-white shadow-2xl z-40 flex flex-col rounded-l-2xl overflow-hidden pointer-events-none">
+    <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-[#3CBFB8]"></span>
+        <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Ettekande skript</span>
+      </div>
+      <button id="close-script" class="w-7 h-7 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-500 flex items-center justify-center text-sm transition-colors pointer-events-auto">✕</button>
+    </div>
+    <div id="script-body" class="flex-1 overflow-y-auto px-5 py-5 text-sm text-gray-700 leading-relaxed space-y-3 pointer-events-auto"></div>
+  </div>
+
+  <!-- Slides wrapper -->
+  <div id="deck" class="w-full" style="height:calc(100vh - 56px)">
+
+    <!-- ─── SLIDE 1 · Title ─────────────────────────────────── -->
+    <div class="slide active flex-col items-center justify-center h-full bg-[#3CBFB8] relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-72 h-72 rounded-full bg-white opacity-10 translate-x-24 -translate-y-24"></div>
+      <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-white opacity-10 -translate-x-16 translate-y-16"></div>
+      <div class="text-center px-12 z-10">
+        <p class="text-white/60 text-xs tracking-widest uppercase font-semibold mb-6">IT juhtimise head tavad koolis</p>
+        <h1 class="text-7xl font-black text-white leading-tight mb-4">Arengu<br>juhtimine</h1>
+        <div class="w-20 h-1 bg-white/40 mx-auto my-6"></div>
+        <p class="text-white/80 text-xl mb-10">Alateemad 3.0 ja 3.1 — IT arengukava koostamine</p>
+        <div class="flex items-center justify-center gap-3 text-white/60 text-base">
+          <span>Eero &amp; Efe</span><span>·</span><span>2025</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 2 · Agenda ────────────────────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-2xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">Sisukord</p>
+        <h2 class="text-4xl font-bold text-gray-800 mb-8">Mida me täna käsitleme?</h2>
+        <div class="space-y-4">
+          <div class="flex items-start gap-5 p-5 bg-[#f0fbfa] rounded-2xl border border-[#3CBFB8]/20">
+            <span class="text-2xl font-black text-[#3CBFB8] mt-0.5 w-10 shrink-0">3.0</span>
+            <div>
+              <p class="font-bold text-gray-800 text-lg">Arengu juhtimine</p>
+              <p class="text-gray-500 text-sm">Miks planeerida · katalüsaatorid · strateegilised küsimused · planeerimise ajakava</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-5 p-5 bg-[#f0fbfa] rounded-2xl border border-[#3CBFB8]/20">
+            <span class="text-2xl font-black text-[#3CBFB8] mt-0.5 w-10 shrink-0">3.1</span>
+            <div>
+              <p class="font-bold text-gray-800 text-lg">IT arengukava koostamine</p>
+              <p class="text-gray-500 text-sm">3 etappi · vajadused · hetkeolukord · arengukava teemad · ülevaatus · hea tava näide</p>
+            </div>
+          </div>
+        </div>
+        <p class="text-gray-300 text-xs mt-6 text-center">Allikas: IT juhtimise head tavad koolis (Tiigrihüpe, 2013)</p>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 3 · Iga kool on erinev ───────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">3. Arengu juhtimine</p>
+        <h2 class="text-4xl font-bold text-gray-800 mb-8">Iga kool on erinev</h2>
+        <div class="grid grid-cols-2 gap-5 mb-6">
+          <div class="p-5 rounded-2xl border-2 border-[#3CBFB8]">
+            <p class="text-[#3CBFB8] font-bold mb-3">Mõnes koolis…</p>
+            <ul class="text-gray-600 text-sm space-y-2">
+              <li class="flex gap-2"><span class="text-[#3CBFB8]">✓</span> On palgaline IT-juht</li>
+              <li class="flex gap-2"><span class="text-[#3CBFB8]">✓</span> On võimalus investeerida</li>
+              <li class="flex gap-2"><span class="text-[#3CBFB8]">✓</span> On IT-kompetentsiga töötajaid</li>
+            </ul>
+          </div>
+          <div class="p-5 rounded-2xl border-2 border-gray-100 bg-gray-50">
+            <p class="text-gray-400 font-bold mb-3">Teises koolis…</p>
+            <ul class="text-gray-500 text-sm space-y-2">
+              <li class="flex gap-2"><span class="text-red-300">✗</span> Ei ole üldse IT-eksperte</li>
+              <li class="flex gap-2"><span class="text-red-300">✗</span> Jätkub vahendeid ainult kulumaterjale</li>
+              <li class="flex gap-2"><span class="text-red-300">✗</span> IT-otsuseid teeb direktor/õpetaja</li>
+            </ul>
+          </div>
+        </div>
+        <div class="p-4 bg-[#3CBFB8] text-white rounded-2xl text-center font-semibold">
+          Kooli IT-korraldus on vaja hoolikalt läbi mõelda ja arengut süsteemselt plaanida
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 4 · Quote ─────────────────────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-[#3CBFB8]">
+      <div class="max-w-2xl px-14 text-center text-white">
+        <p class="text-white/60 text-xs tracking-widest uppercase font-semibold mb-8">Võtmepõhimõte</p>
+        <p class="text-3xl font-bold leading-relaxed mb-10">
+          "Piiratud eelarve tingimustes tuleb olla eriti hoolikas, et väheseid ressursse rakendataks kõige õigemal viisil."
+        </p>
+        <div class="w-16 h-px bg-white/30 mx-auto mb-8"></div>
+        <p class="text-white/75 text-lg">Strateegiline ja taktikaline läbimõtlemine võib IT-valdkonnas olla päris ebameeldiv ja kulukas.</p>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 5 · Katalüsaatorid ───────────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">3. Arengu juhtimine</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-7">Arenguvisioonide 7 katalüsaatorit</h2>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex items-center gap-3 p-3 bg-[#f0fbfa] rounded-xl">
+            <span class="w-9 h-9 rounded-full bg-[#3CBFB8] text-white flex items-center justify-center font-bold text-sm shrink-0">1</span>
+            <span class="text-gray-700 text-sm font-medium">Taluvuspiiri ületanud rahulolematus</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 bg-[#f0fbfa] rounded-xl">
+            <span class="w-9 h-9 rounded-full bg-[#3CBFB8] text-white flex items-center justify-center font-bold text-sm shrink-0">2</span>
+            <span class="text-gray-700 text-sm font-medium">Rahastamisvõimalused</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 bg-[#f0fbfa] rounded-xl">
+            <span class="w-9 h-9 rounded-full bg-[#3CBFB8] text-white flex items-center justify-center font-bold text-sm shrink-0">3</span>
+            <span class="text-gray-700 text-sm font-medium">Muudatus organisatsioonis</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 bg-[#f0fbfa] rounded-xl">
+            <span class="w-9 h-9 rounded-full bg-[#3CBFB8] text-white flex items-center justify-center font-bold text-sm shrink-0">4</span>
+            <span class="text-gray-700 text-sm font-medium">Muudatus juhtkonnas</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 bg-[#f0fbfa] rounded-xl">
+            <span class="w-9 h-9 rounded-full bg-[#3CBFB8] text-white flex items-center justify-center font-bold text-sm shrink-0">5</span>
+            <span class="text-gray-700 text-sm font-medium">Tehnoloogia areng</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 bg-orange-50 rounded-xl">
+            <span class="w-9 h-9 rounded-full bg-[#F5821F] text-white flex items-center justify-center font-bold text-sm shrink-0">6</span>
+            <span class="text-gray-700 text-sm font-medium">Kriis</span>
+          </div>
+          <div class="col-span-2 flex items-center gap-3 p-3 bg-[#f0fbfa] rounded-xl">
+            <span class="w-9 h-9 rounded-full bg-[#3CBFB8] text-white flex items-center justify-center font-bold text-sm shrink-0">7</span>
+            <span class="text-gray-700 text-sm font-medium">IT-turvalisuse tõstmine</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 6 · 3 strateegilist küsimust ─────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">3. Arengu juhtimine</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">Kolm strateegilist küsimust</h2>
+        <div class="space-y-5">
+          <div class="flex gap-5 p-5 bg-gray-50 border-l-4 border-[#3CBFB8] rounded-r-2xl">
+            <span class="text-5xl font-black text-[#3CBFB8]/20 leading-none shrink-0">1</span>
+            <p class="text-gray-700 text-lg leading-relaxed self-center">Kui palju IT-ülesandeid täidavad kooli töötajad ja õpilased ning millist eksperditeadmist ostetakse sisse?</p>
+          </div>
+          <div class="flex gap-5 p-5 bg-gray-50 border-l-4 border-[#3CBFB8] rounded-r-2xl">
+            <span class="text-5xl font-black text-[#3CBFB8]/20 leading-none shrink-0">2</span>
+            <p class="text-gray-700 text-lg leading-relaxed self-center">Millised on valukohad, probleemid ja rahuldamata soovid?</p>
+          </div>
+          <div class="flex gap-5 p-5 bg-gray-50 border-l-4 border-[#3CBFB8] rounded-r-2xl">
+            <span class="text-5xl font-black text-[#3CBFB8]/20 leading-none shrink-0">3</span>
+            <p class="text-gray-700 text-lg leading-relaxed self-center">Kas kooli tegevuses on lähema kolme aasta jooksul plaanitud muutusi? Kui, siis milliseid?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 7 · Planeerimise ajakava ─────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">3. Arengu juhtimine</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">Planeerimise ajakava</h2>
+        <div class="grid grid-cols-2 gap-6 mb-7">
+          <div class="text-center p-8 bg-[#3CBFB8] rounded-2xl text-white">
+            <p class="text-7xl font-black mb-2">3–5</p>
+            <p class="text-xl font-semibold mb-1">aastat</p>
+            <p class="text-white/70 text-sm">IT arengukava pikkus</p>
+          </div>
+          <div class="text-center p-8 bg-[#f0fbfa] rounded-2xl border-2 border-[#3CBFB8]/30">
+            <p class="text-7xl font-black text-[#3CBFB8] mb-2">2</p>
+            <p class="text-xl font-semibold text-gray-700 mb-1">aastat</p>
+            <p class="text-gray-400 text-sm">Eelarvestatud tegevusplaan</p>
+          </div>
+        </div>
+        <div class="p-4 bg-amber-50 border border-amber-200 rounded-2xl text-amber-800 text-sm text-center">
+          💡 Tugevat vundamenti rajavad muudatused IT-valdkonnas võtavad aega — planeeri ette!
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 8 · Section break 3.1 ────────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-gray-950">
+      <div class="text-center">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-4">Järgmine teema</p>
+        <p class="text-9xl font-black text-white/5 mb-2 leading-none">3.1</p>
+        <h2 class="text-5xl font-black text-white mb-5">IT arengukava<br>koostamine</h2>
+        <div class="w-16 h-1 bg-[#3CBFB8] mx-auto"></div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 9 · Mis on IT arengukava ─────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-2xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">3.1 IT arengukava koostamine</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-5">Mis on IT arengukava?</h2>
+        <p class="text-gray-400 text-base mb-8 leading-relaxed">IT-valdkonna arengute kirjeldused peavad olema loomulik osa kooli üldisest arengukavast.</p>
+        <div class="p-5 bg-[#3CBFB8] text-white rounded-2xl text-center font-semibold text-lg leading-snug mb-6">
+          IT arengukava ülesanne on lihtsas ja süsteemses vormis kirjeldada olulisi põhimõtteid, tegevusi ja mõõdikuid kooli IT-valdkonna arendamisel.
+        </div>
+        <div class="p-4 bg-amber-50 border border-amber-200 rounded-2xl text-amber-800 text-sm">
+          ⚡ Kooli IT-valdkonna hüppelise arengu etapil on mõistlik koostada <strong>eraldi IT arengukava</strong>.
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 10 · 3 etappi ─────────────────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">3.1 IT arengukava koostamine</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">Arengukava koostamise 3 etappi</h2>
+        <div class="flex gap-4 items-stretch">
+          <div class="flex-1 p-6 bg-[#f0fbfa] border-2 border-[#3CBFB8] rounded-2xl text-center flex flex-col items-center">
+            <div class="w-12 h-12 rounded-full bg-[#3CBFB8] text-white text-xl font-black flex items-center justify-center mb-3">1</div>
+            <p class="font-bold text-gray-800 mb-2">Vajaduste kirjeldamine</p>
+            <p class="text-gray-400 text-sm">Kooli vajaduste ja soovide kaardistamine</p>
+          </div>
+          <div class="flex items-center text-[#3CBFB8] text-2xl font-black shrink-0">→</div>
+          <div class="flex-1 p-6 bg-[#f0fbfa] border-2 border-[#3CBFB8] rounded-2xl text-center flex flex-col items-center">
+            <div class="w-12 h-12 rounded-full bg-[#3CBFB8] text-white text-xl font-black flex items-center justify-center mb-3">2</div>
+            <p class="font-bold text-gray-800 mb-2">Hetkeolukorra hindamine</p>
+            <p class="text-gray-400 text-sm">IT olukorra analüüs ja kirjeldamine</p>
+          </div>
+          <div class="flex items-center text-[#3CBFB8] text-2xl font-black shrink-0">→</div>
+          <div class="flex-1 p-6 bg-[#f0fbfa] border-2 border-[#3CBFB8] rounded-2xl text-center flex flex-col items-center">
+            <div class="w-12 h-12 rounded-full bg-[#3CBFB8] text-white text-xl font-black flex items-center justify-center mb-3">3</div>
+            <p class="font-bold text-gray-800 mb-2">Tegevuste kirjeldamine</p>
+            <p class="text-gray-400 text-sm">Tegevused, mõõdikud, investeeringud</p>
+          </div>
+        </div>
+        <p class="text-gray-300 text-xs text-center mt-6">Vajaduste kirjeldamisel saab lähtuda seadusest, kooli tööprotsessidest ja tehnoloogia pakutavatest võimalustest.</p>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 11 · Etapp 1 vajadused ───────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">Etapp 1 — Vajaduste kirjeldamine</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Iga vajaduse kohta dokumenteeri 3 asja</h2>
+        <div class="grid grid-cols-3 gap-5 mb-7">
+          <div class="p-6 bg-[#f0fbfa] rounded-2xl text-center">
+            <p class="text-4xl mb-3">📝</p>
+            <p class="font-bold text-gray-800 mb-1">Lühikirjeldus</p>
+            <p class="text-gray-400 text-sm">Mida on vaja?</p>
+          </div>
+          <div class="p-6 bg-[#f0fbfa] rounded-2xl text-center">
+            <p class="text-4xl mb-3">💡</p>
+            <p class="font-bold text-gray-800 mb-1">Põhjendus</p>
+            <p class="text-gray-400 text-sm">Miks see on oluline?</p>
+          </div>
+          <div class="p-6 bg-[#f0fbfa] rounded-2xl text-center">
+            <p class="text-4xl mb-3">🔍</p>
+            <p class="font-bold text-gray-800 mb-1">Täpsustavad asjaolud</p>
+            <p class="text-gray-400 text-sm">Lisainfo ja kontekst</p>
+          </div>
+        </div>
+        <div class="p-4 bg-blue-50 border border-blue-200 rounded-2xl text-blue-700 text-sm leading-relaxed">
+          💬 <strong>Kaasake võimalikult palju töötajaid.</strong> Inimesed, kes saavad osaleda muudatuste plaanimisel, on rohkem rahul ka nende elluviimisega.
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 12 · Etapp 2 hetkeolukord ────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">Etapp 2 — Hetkeolukorra kirjeldamine</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">Tunda tuleb stardipunkti</h2>
+        <p class="text-gray-400 text-sm mb-6">Selleks et jõuda tänasest töökorraldusest vajadustele vastava uue töökorralduseni, on vaja hästi tunda IT-valdkonna hetkeolukorda.</p>
+        <div class="grid grid-cols-2 gap-5">
+          <div class="p-5 bg-gray-50 rounded-2xl border-l-4 border-gray-300">
+            <p class="font-bold text-gray-700 mb-3">📋 Infosüsteemi ülevaade</p>
+            <p class="text-gray-400 text-xs mb-3 uppercase tracking-wide">Lühike kokkuvõtlik dokument</p>
+            <ul class="text-gray-600 text-sm space-y-1.5">
+              <li class="flex gap-2"><span class="text-gray-300">•</span>Põhiteadmised süsteemist</li>
+              <li class="flex gap-2"><span class="text-gray-300">•</span>Ülevaatlik skeem</li>
+              <li class="flex gap-2"><span class="text-gray-300">•</span>IT-organisatsiooni iseloomustus</li>
+            </ul>
+            <p class="text-gray-300 text-xs mt-3 italic">Mõeldud juhtkonnale ja partneritele</p>
+          </div>
+          <div class="p-5 bg-[#f0fbfa] rounded-2xl border-l-4 border-[#3CBFB8]">
+            <p class="font-bold text-gray-700 mb-3">📁 Hetkeolukorra kirjeldus</p>
+            <p class="text-gray-400 text-xs mb-3 uppercase tracking-wide">Põhjalik komplekt — 6 elementi</p>
+            <ul class="text-gray-600 text-sm space-y-1.5">
+              <li class="flex gap-2"><span class="text-[#3CBFB8]">•</span>Kasutatavad IT-lahendused</li>
+              <li class="flex gap-2"><span class="text-[#3CBFB8]">•</span>Töös olevad projektid</li>
+              <li class="flex gap-2"><span class="text-[#3CBFB8]">•</span>IT-rollide jaotus koolis</li>
+              <li class="flex gap-2"><span class="text-[#3CBFB8]">•</span>Andmete liikumine</li>
+              <li class="flex gap-2"><span class="text-[#3CBFB8]">•</span>Hooldus- ja arenduspartnerid</li>
+              <li class="flex gap-2"><span class="text-[#3CBFB8]">•</span>Oluline dokumentatsioon</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 13 · 6 elementi detail ───────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">Hetkeolukorra kirjelduse komplekt</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-7">6 kohustuslikku elementi</h2>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+            <span class="w-8 h-8 rounded-full bg-[#3CBFB8] text-white flex items-center justify-center font-bold text-sm shrink-0">1</span>
+            <div><p class="font-semibold text-gray-800 text-sm">Kasutatavad IT-lahendused</p><p class="text-gray-400 text-xs">Tarkvara, riistvara, teenused</p></div>
+          </div>
+          <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+            <span class="w-8 h-8 rounded-full bg-[#3CBFB8] text-white flex items-center justify-center font-bold text-sm shrink-0">2</span>
+            <div><p class="font-semibold text-gray-800 text-sm">Töös olevad projektid</p><p class="text-gray-400 text-xs">Käimasolevad arendustegevused</p></div>
+          </div>
+          <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+            <span class="w-8 h-8 rounded-full bg-[#3CBFB8] text-white flex items-center justify-center font-bold text-sm shrink-0">3</span>
+            <div><p class="font-semibold text-gray-800 text-sm">IT-rollide jaotus koolis</p><p class="text-gray-400 text-xs">Kes mida haldab ja vastutab</p></div>
+          </div>
+          <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+            <span class="w-8 h-8 rounded-full bg-[#3CBFB8] text-white flex items-center justify-center font-bold text-sm shrink-0">4</span>
+            <div><p class="font-semibold text-gray-800 text-sm">Ülevaade andmetest ja liikumisest</p><p class="text-gray-400 text-xs">Infoturbe taseme tõstmine</p></div>
+          </div>
+          <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+            <span class="w-8 h-8 rounded-full bg-[#3CBFB8] text-white flex items-center justify-center font-bold text-sm shrink-0">5</span>
+            <div><p class="font-semibold text-gray-800 text-sm">Hooldus- ja arenduspartnerid</p><p class="text-gray-400 text-xs">Partnerid ja nende vastutusalad</p></div>
+          </div>
+          <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+            <span class="w-8 h-8 rounded-full bg-[#3CBFB8] text-white flex items-center justify-center font-bold text-sm shrink-0">6</span>
+            <div><p class="font-semibold text-gray-800 text-sm">Oluline dokumentatsioon</p><p class="text-gray-400 text-xs">Sh põhiloendid</p></div>
+          </div>
+        </div>
+        <p class="text-gray-300 text-xs text-center mt-5">Põhjalik hetkeolukorra kirjeldus on oluliste teadmiste ja IT-loendite korrastatud komplekt.</p>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 14 · Arengukava teemad 1/2 ──────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">Etapp 3 — Arengukava teemad (1/2)</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Mida arengukava peab katma?</h2>
+        <div class="space-y-3">
+          <div class="flex gap-4 p-4 bg-[#f0fbfa] rounded-xl items-start">
+            <span class="text-xl shrink-0 mt-0.5">🎯</span>
+            <div><p class="font-bold text-gray-800 text-sm">Arendusprioriteedid ja eeldused</p><p class="text-gray-400 text-xs">Olulisemad arenguprojektid tähtsuse järjekorras + eeldused nende saavutamiseks (rahastamine, partnerid, juhtkonna tugi)</p></div>
+          </div>
+          <div class="flex gap-4 p-4 bg-[#f0fbfa] rounded-xl items-start">
+            <span class="text-xl shrink-0 mt-0.5">🖥️</span>
+            <div><p class="font-bold text-gray-800 text-sm">Infosüsteem aastal XXXX</p><p class="text-gray-400 text-xs">Lühike visuaalne ülevaade infosüsteemist arengukava viimase aasta lõpuks</p></div>
+          </div>
+          <div class="flex gap-4 p-4 bg-[#f0fbfa] rounded-xl items-start">
+            <span class="text-xl shrink-0 mt-0.5">🏢</span>
+            <div><p class="font-bold text-gray-800 text-sm">IT-organisatsioon ja juhtimine</p><p class="text-gray-400 text-xs">Rollide ja vastutuse jaotus, koordineerimise korraldus, teenuste sisseostmise ulatus</p></div>
+          </div>
+          <div class="flex gap-4 p-4 bg-[#f0fbfa] rounded-xl items-start">
+            <span class="text-xl shrink-0 mt-0.5">🏗️</span>
+            <div><p class="font-bold text-gray-800 text-sm">Infrastruktuuri visioon</p><p class="text-gray-400 text-xs">Serverite põhimõtted, toimepidevuse tagamine, infrastruktuuri mõõdikud (nt rikked ei põhjusta seiskumist rohkem kui 2 tundi)</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 15 · Arengukava teemad 2/2 ──────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">Etapp 3 — Arengukava teemad (2/2)</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Arengukava teemad — jätk</h2>
+        <div class="space-y-3">
+          <div class="flex gap-4 p-4 bg-[#f0fbfa] rounded-xl items-start">
+            <span class="text-xl shrink-0 mt-0.5">🎧</span>
+            <div><p class="font-bold text-gray-800 text-sm">Kasutajatoe visioon</p><p class="text-gray-400 text-xs">Teenuse kirjeldus, põhinõuded (nt tööpäevadel 9–17, peetakse töö register), mõõdikud (probleem lahendatakse 2 tööpäeva jooksul)</p></div>
+          </div>
+          <div class="flex gap-4 p-4 bg-[#f0fbfa] rounded-xl items-start">
+            <span class="text-xl shrink-0 mt-0.5">🔧</span>
+            <div><p class="font-bold text-gray-800 text-sm">Arenduse visioon</p><p class="text-gray-400 text-xs">Arenduste läbiviimise põhimõtted, töökorralduse lühikirjeldus ja vastutuse jaotus</p></div>
+          </div>
+          <div class="flex gap-4 p-4 bg-[#f0fbfa] rounded-xl items-start">
+            <span class="text-xl shrink-0 mt-0.5">🔒</span>
+            <div><p class="font-bold text-gray-800 text-sm">Infoturbe visioon</p><p class="text-gray-400 text-xs">Riskihaldus, turvateadlikkus, seire, toimepidevus, infoturbe mõõdikud (nt turbeintsidente max 2x aastas)</p></div>
+          </div>
+          <div class="flex gap-4 p-4 bg-orange-50 rounded-xl items-start border border-orange-100">
+            <span class="text-xl shrink-0 mt-0.5">📋</span>
+            <div><p class="font-bold text-gray-800 text-sm">Tegevuskava + Investeeringute kava</p><p class="text-gray-400 text-xs">Vältimatud tegevused kohe + 2-aastane planeeritud tegevuskava koos investeeringute hinnangutega</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 16 · Tegevuskava struktuur ───────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">Tegevuskava</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Tegevuskava struktuur</h2>
+        <div class="grid grid-cols-2 gap-5 mb-5">
+          <div class="p-5 bg-red-50 border border-red-200 rounded-2xl">
+            <p class="font-bold text-red-700 mb-2">⚠️ Vältimatud tegevused</p>
+            <p class="text-gray-600 text-sm">Tööd, mis on jätkusuutlikkuse ja turvalisuse mõttes hädavajalikud — tuleb alustada <strong>kohe</strong>.</p>
+          </div>
+          <div class="p-5 bg-blue-50 border border-blue-200 rounded-2xl">
+            <p class="font-bold text-blue-700 mb-2">📅 Kavandatud tegevused (2a)</p>
+            <p class="text-gray-600 text-sm">Tegevused järjestatud tähtsuse järjekorras järgmise kahe aasta jooksul elluviimiseks.</p>
+          </div>
+        </div>
+        <div class="p-4 bg-[#f0fbfa] rounded-2xl mb-4">
+          <p class="font-semibold text-gray-700 text-sm mb-3">Iga tegevuse juures dokumenteeri:</p>
+          <div class="grid grid-cols-3 gap-3 text-sm text-gray-600">
+            <div class="flex items-center gap-2"><span class="text-[#3CBFB8]">✓</span>Mõõdetavad tulemused</div>
+            <div class="flex items-center gap-2"><span class="text-[#3CBFB8]">✓</span>Olulisemad eeldused</div>
+            <div class="flex items-center gap-2"><span class="text-[#3CBFB8]">✓</span>Praktilised näpunäited</div>
+          </div>
+        </div>
+        <div class="p-4 bg-gray-50 rounded-2xl text-sm text-gray-500">
+          <strong>Investeeringute näide:</strong> E-posti server — riistvara 2 500€ + tarkvara litsents 1 000€ + serverilitsents 500€ = <strong class="text-gray-700">kokku 4 000€</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 17 · Regulaarne ülevaatus ────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-3">Arengukava haldamine</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">Arengukava tuleb regulaarselt üle vaadata</h2>
+        <div class="flex gap-6 items-stretch mb-6">
+          <div class="flex-1 space-y-4">
+            <div class="flex items-start gap-4 p-5 bg-[#f0fbfa] rounded-2xl border-l-4 border-[#3CBFB8]">
+              <p class="text-3xl font-black text-[#3CBFB8] shrink-0 leading-none">3a</p>
+              <div><p class="font-bold text-gray-800">Põhjalik ülevaatus</p><p class="text-gray-400 text-sm">Kord kolme aasta jooksul — täielik arengukava uuendus</p></div>
+            </div>
+            <div class="flex items-start gap-4 p-5 bg-gray-50 rounded-2xl border-l-4 border-gray-200">
+              <p class="text-3xl font-black text-gray-300 shrink-0 leading-none">1a</p>
+              <div><p class="font-bold text-gray-800">Iga-aastane ülevaatus</p><p class="text-gray-400 text-sm">Hinnata eelmise aasta tegevusi + kirjeldada järgmise 2 aasta tegevusi</p></div>
+            </div>
+          </div>
+          <div class="flex-1 p-6 bg-[#3CBFB8] text-white rounded-2xl flex flex-col items-center justify-center text-center">
+            <p class="text-5xl mb-4">🔄</p>
+            <p class="font-semibold leading-snug">Arengukava on elav dokument — pidev tsükkel planeerimisest, elluviimisest ja hindamisest</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 18 · Hea tava näide ──────────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-white">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#F5821F] text-xs tracking-widest uppercase font-semibold mb-3">Hea tava näide</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Ahtme Gümnaasium — Süsteemne IKT arendamine</h2>
+        <div class="grid grid-cols-2 gap-5">
+          <div class="space-y-3">
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Kool</p>
+              <p class="text-gray-700 text-sm">Põhikool-gümnaasium · 83 õpetajat · 662 õpilast</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Visioon</p>
+              <p class="text-gray-700 text-sm">Loominguline laboratoorium — uus õppesisu, uued õppevormid, rahvusvahelised projektid</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Edutegurid</p>
+              <p class="text-gray-700 text-sm">Juhtkonna eestvedamine · innovatsioonile suunatud koolikultuur</p>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="p-4 bg-[#f0fbfa] rounded-xl">
+              <p class="text-xs text-[#3CBFB8] uppercase tracking-wide font-semibold mb-2">Saavutused</p>
+              <ul class="text-gray-600 text-sm space-y-1.5">
+                <li class="flex gap-2"><span class="text-[#3CBFB8]">✓</span>IT arendusega tegeletud üle 20 aasta</li>
+                <li class="flex gap-2"><span class="text-[#3CBFB8]">✓</span>Esimene infojuht tööle 1989</li>
+                <li class="flex gap-2"><span class="text-[#3CBFB8]">✓</span>Robootikaring ja õpiriistvara lahendused</li>
+                <li class="flex gap-2"><span class="text-[#3CBFB8]">✓</span>Süsteemne õpetajate koolitamine</li>
+              </ul>
+            </div>
+            <div class="p-4 bg-[#3CBFB8] rounded-xl text-white">
+              <p class="text-xs text-white/60 uppercase tracking-wide font-semibold mb-1">Kasu</p>
+              <p class="text-sm">Kooli süsteemne areng · huvitavam õppetöö · parem õppekvaliteet · IKT efektiivne kasutus</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 19 · Kokkuvõte ────────────────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-gray-950">
+      <div class="max-w-3xl w-full px-14">
+        <p class="text-[#3CBFB8] text-xs tracking-widest uppercase font-semibold mb-4 text-center">Kokkuvõte</p>
+        <h2 class="text-4xl font-black text-white mb-8 text-center">Peamised võtmepunktid</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex gap-3 p-4 bg-white/5 rounded-xl"><span class="text-[#3CBFB8] shrink-0">📌</span><p class="text-white/70 text-sm">IT arengukava on 3–5-aastane strateegiline dokument koos 2-aastase tegevusplaaniga</p></div>
+          <div class="flex gap-3 p-4 bg-white/5 rounded-xl"><span class="text-[#3CBFB8] shrink-0">📌</span><p class="text-white/70 text-sm">Planeerimine algab vajaduste kaardistamisest — kaasata tuleb kõik huvigrupped</p></div>
+          <div class="flex gap-3 p-4 bg-white/5 rounded-xl"><span class="text-[#3CBFB8] shrink-0">📌</span><p class="text-white/70 text-sm">Enne tulevikku planeerimist tuleb hästi tunda hetkeolukorda (6 elementi)</p></div>
+          <div class="flex gap-3 p-4 bg-white/5 rounded-xl"><span class="text-[#3CBFB8] shrink-0">📌</span><p class="text-white/70 text-sm">Arengukava peab katma taristu, kasutajatoe, infoturbe ja arenduse visiooni</p></div>
+          <div class="flex gap-3 p-4 bg-white/5 rounded-xl"><span class="text-[#3CBFB8] shrink-0">📌</span><p class="text-white/70 text-sm">Ülevaatus igal aastal; põhjalik ülevaatus iga 3 aasta tagant</p></div>
+          <div class="flex gap-3 p-4 bg-white/5 rounded-xl"><span class="text-[#3CBFB8] shrink-0">📌</span><p class="text-white/70 text-sm">Edu aluseks on juhtkonna tugi, süsteemne lähenemine ja kogukonna kaasamine</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SLIDE 20 · Aitäh ─────────────────────────────────── -->
+    <div class="slide flex-col items-center justify-center h-full bg-[#3CBFB8] relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-80 h-80 rounded-full bg-white opacity-10 translate-x-32 -translate-y-32"></div>
+      <div class="absolute bottom-0 left-0 w-56 h-56 rounded-full bg-white opacity-10 -translate-x-20 translate-y-20"></div>
+      <div class="text-center text-white z-10">
+        <p class="text-white/60 text-xs tracking-widest uppercase font-semibold mb-6">IT juhtimise head tavad koolis</p>
+        <h1 class="text-7xl font-black mb-6">Aitäh!</h1>
+        <div class="w-16 h-px bg-white/30 mx-auto mb-6"></div>
+        <p class="text-white/80 text-2xl mb-10">Küsimused?</p>
+        <p class="text-white/50 text-sm">Eero &amp; Efe · Alateemad 3.0 ja 3.1</p>
+        <p class="text-white/40 text-xs mt-2">Allikas: IT juhtimise head tavad koolis (Tiigrihüpe, 2013)</p>
+      </div>
+    </div>
+
+  </div><!-- /deck -->
+
+  <!-- ─── Navigation bar ─────────────────────────────────────── -->
+  <div class="fixed bottom-0 left-0 right-0 h-14 bg-white border-t border-gray-100 flex items-center justify-between px-8 z-40">
+    <span class="text-gray-300 text-xs font-mono"><span id="cur">1</span> / <span id="tot"></span></span>
+    <div class="flex gap-2">
+      <button id="btn-prev" class="px-5 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full text-sm font-medium transition-colors disabled:opacity-30 disabled:cursor-not-allowed">← Eelmine</button>
+      <button id="btn-next" class="px-5 py-1.5 bg-[#3CBFB8] hover:bg-[#2ea8a2] text-white rounded-full text-sm font-medium transition-colors">Järgmine →</button>
+    </div>
+    <span class="text-gray-200 text-xs">← → nooleklahvid &nbsp;·&nbsp; ⓘ skript &nbsp;·&nbsp; P lehekülg</span>
+  </div>
+
+  <!-- ─── Page-jump overlay ──────────────────────────────────── -->
+  <div id="page-jump" class="fixed inset-0 z-50 items-center justify-center bg-black/50 backdrop-blur-sm" style="display:none">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 flex flex-col items-center gap-3 w-56">
+      <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Mine lehele</p>
+      <input id="page-input" type="number" min="1"
+        class="w-full border-2 border-[#3CBFB8] rounded-xl px-3 py-2 text-2xl font-bold text-center text-gray-800 outline-none"
+        placeholder="nr" />
+      <p class="text-gray-300 text-xs text-center"><span id="page-jump-total"></span><br>Enter — mine · Esc — tühista</p>
+    </div>
+  </div>
+
+  <script>
+    $(function () {
+
+      /* ── Speaker scripts ──────────────────────────────────── */
+      var scripts = [
+        /* 1 */ [
+          "Tere päevast kõigile.",
+          "Minu nimi on Efe ja täna presenteerime koos Eeroga IT juhtimise heade tavade raamatu kolmandat peatükki — Arengu juhtimist.",
+          "Täpsemalt käsitleme alateema 3.0, mis on Arengu juhtimise sissejuhatus, ja alateema 3.1 — IT arengukava koostamine.",
+          "Meie ettekanne kestab umbes 15–20 minutit. Alustame!"
+        ],
+        /* 2 */ [
+          "Vaatame kõigepealt üle, mida me täna käsitleme.",
+          "Jaotame ettekande kaheks osaks. Esimene osa — alateema 3.0 — käsitleb arengu juhtimise üldiseid põhimõtteid: miks on planeerimine üldse oluline, mis käivitab muutused koolides ning milliseid strateegilisi küsimusi tuleb esimesena esitada.",
+          "Teine osa — alateema 3.1 — läheb detailsemaks ja räägib konkreetselt IT arengukava koostamisest: kuidas seda teha, mida see peab sisaldama ja kuidas seda hallata.",
+          "Kõik materjalid põhinevad raamatul 'IT juhtimise head tavad koolis', mille andis välja Hariduse Infotehnoloogia Sihtasutus 2013. aastal."
+        ],
+        /* 3 */ [
+          "Kõigepealt — miks me üldse räägime arengu juhtimisest?",
+          "Vastus on lihtne: iga kooli olukord on erinev. Mõnel koolil on palgaline IT-juht, eraldi IT-osakond ja võimalus teha suuremaid investeeringuid. Teises koolis ei ole üldse IT-kompetentsiga töötajaid ning IT-otsuseid teeb direktor või mõni õpetaja muude tööülesannete kõrvalt.",
+          "See tähendab, et ei ole ühtset lahendust, mis sobib kõigile. Samas kehtib üks asi kõigile koolidele: IT-korraldus on vaja hoolikalt läbi mõelda ja arengut süsteemselt planeerida.",
+          "Eesmärk ei ole teha nii nagu naaber, vaid leida oma koolile kõige sobivamad lahendused."
+        ],
+        /* 4 */ [
+          "Ja siin tulebki mängu üks põhimõte, mida raamat eriti rõhutab.",
+          "Tsiteerime: 'Piiratud eelarve tingimustes tuleb olla eriti hoolikas, et väheseid ressursse rakendataks kõige õigemal viisil.'",
+          "See on oluline — koolide IT-eelarved on sageli väikesed ja vigade tegemise ruum on piiratud. Kui ostad vale seadmepargi, kulutad raha tarkvara peale, mida keegi ei kasuta, või palkad vale teenusepakkuja — need vead võivad koolil maksma minna palju rohkem kui lihtsalt raha. Kaotad ka aega, töötajate motivatsiooni ja usaldust.",
+          "Seetõttu tasub investeerida planeerimisse — isegi kui see võtab aega."
+        ],
+        /* 5 */ [
+          "Mis paneb koolid üldse oma IT-arengut planeerima? Raamat toob välja seitse peamist katalüsaatorit — ehk põhjust, miks koolides hakatakse IT-arenguvisioone looma või muutma.",
+          "Esimene ja kõige levinum on rahulolematus — kui töötajad on nii pahased, et nad lihtsalt ei saa enam töötada nagu varem.",
+          "Teine on rahastamisvõimalused — näiteks Euroopa Liidu fondid või riiklikud toetusprogrammid avanevad sageli ootamatult ja nõuavad kiiret tegutsemist.",
+          "Kolmas ja neljas on muutused organisatsioonis või juhtkonnas — uus direktor sageli toob kaasa uue visiooni ja uued prioriteedid.",
+          "Viies on tehnoloogia areng — kui tekivad uued võimalused, mis on selgelt paremad ja kättesaadavamad kui varem.",
+          "Kuues — ja see on kriis — näiteks küberrünnak, rike või andmeleke, mis sunnib kooli kiiresti midagi muutma.",
+          "Seitsmes on infoturbe tõstmine — üha enam nõuavad seadused ja määrused teatud turvataset. Märkige, et kriis on oranžiga tähistatud — see on häirekell, mitte soovitud käivitaja."
+        ],
+        /* 6 */ [
+          "Enne kui hakata arengukava kirjutama, tuleb esitada kolm fundamentaalset strateegilist küsimust.",
+          "Esimene küsimus — kui palju IT-ülesandeid täidavad kooli töötajad ise ja milleks ostetakse abi sisse? See aitab mõista ressursinõudeid ja tegelikku võimekust.",
+          "Teine küsimus — millised on valukohad? Kus on praegu kõige suuremad probleemid? Mis ei tööta? Mis takistab igapäevatööd? See annab prioriteedid.",
+          "Kolmas küsimus — kas kooli tegevuses on lähema kolme aasta jooksul plaanitud muutusi? Näiteks: kas kool läheb üle e-päevikule? Kas avatakse uus õppesuund? Need muutused mõjutavad otseselt IT-vajadusi.",
+          "Need kolm küsimust on hea lähtepunkt igale IT-planeerimise protsessile — vastused annavad suuna ja prioriteedid."
+        ],
+        /* 7 */ [
+          "Nüüd räägime planeerimise ajakavast.",
+          "Raamat soovitab IT arengukava koostada 3–5 aastaks. Miks nii pikalt? Kuna IT-investeeringud — eriti riistvara ja infrastruktuur — kestavad aastaid. Arvutid kasutame 5–7 aastat, serverid kauem. Lühiajaliselt planeerimine ei anna piisavalt perspektiivi.",
+          "Samas eelarvestatud tegevusplaan — ehk konkreetsed tegevused ja kulud — tehakse ainult 2 aastaks. Kaugemale on raske täpselt eelarvestada, kuna hinnad ja vajadused muutuvad.",
+          "Ja nagu raamat ütleb — tugevat vundamenti rajavad muudatused IT-valdkonnas võtavad aega.",
+          "Seega: planeeri strateegiliselt 3–5 aastat ette, aga tegutse konkreetselt 2 aasta raamides."
+        ],
+        /* 8 */ [
+          "Nüüd liigume edasi konkreetsema teema juurde.",
+          "Oleme käsitlenud arengu juhtimise üldisi põhimõtteid — miks planeerida, mis käivitab muutused ja millised on põhiküsimused.",
+          "Järgmisena vaatame, kuidas IT arengukava tegelikult koostatakse. See on alateema 3.1."
+        ],
+        /* 9 */ [
+          "Mis on IT arengukava täpsemalt?",
+          "IT arengukava on dokument, mis kirjeldab kooli IT-valdkonna strateegilisi eesmärke, tegevusi ja mõõdikuid. Ideaalis peaks IT arengukava olema osa kooli üldisest arengukavast — mitte eraldi dokument, vaid seotud kooli hariduslike eesmärkidega.",
+          "Samas — kui kool on IT-valdkonnas kiires arenguetapis, soovitab raamat koostada eraldi IT arengukava, kuna see nõuab rohkem tähelepanu ja detailsust.",
+          "IT arengukava ülesanne on olla lihtne ja süsteemne — see ei ole tehniline dokument inseneridele, vaid strateegiline dokument juhtkonnale ja kogu koolipere jaoks."
+        ],
+        /* 10 */ [
+          "IT arengukava koostamine koosneb kolmest etapist, mis peavad käima kindlas järjekorras.",
+          "Esimene etapp on vajaduste kirjeldamine — kaardistame, mida kool vajab ja soovib IT-valdkonnas.",
+          "Teine etapp on hetkeolukorra hindamine — vaatame, kus me praegu oleme. Ilma stardipunkti tundmata ei saa me planeerida teed eesmärgini.",
+          "Kolmas etapp on tegevuste kirjeldamine — planeerime, mida konkreetselt teeme, millal ja kui palju see maksab.",
+          "Oluline märkus: vajaduste kirjeldamisel saab lähtuda kolmest allikast — seadusest ehk mis on kohustuslik, kooli tööprotsessidest ehk mis on vajalik igapäevatöö tegemiseks, ja tehnoloogia võimalustest ehk mis on praegu kättesaadav ja mõistliku hinnaga."
+        ],
+        /* 11 */ [
+          "Räägime esimesest etapist täpsemalt — vajaduste ja soovide kirjeldamisest.",
+          "Iga vajaduse ja soovi kohta tuleb dokumenteerida kolm asja.",
+          "Esiteks lühikirjeldus — mida täpselt vajatakse. Näiteks: 'Vajame töökindlat printimisteenust kõikidele õpetajatele.'",
+          "Teiseks põhjendus — miks see on oluline. Näiteks: 'Praegu seisavad tunnid, sest printer ei tööta.'",
+          "Kolmandaks täpsustavad asjaolud — lisainfo, mis aitab mõista vajaduse ulatust. Näiteks: 'Õpetajad peavad printima keskmiselt 50 lehte päevas, suurim koormus on hommikul 8–9.'",
+          "Oluline nõuanne: kaasake vajaduste kaardistamisse nii palju töötajaid kui võimalik — direktorist kuni koristajani. Nii saate kõik vajadused kätte. Ja mis veelgi tähtsam — inimesed, kes osalevad planeerimises, on muudatustega hiljem rohkem rahul."
+        ],
+        /* 12 */ [
+          "Teine etapp on hetkeolukorra kirjeldamine.",
+          "Raamat ütleb selgelt: selleks et jõuda uude, paremasse olukorda, peate hästi teadma, kus te praegu olete. Mõelge sellele nagu navigatsioonile — ilma stardipunktita ei aita ka parim kaart.",
+          "Hetkeolukorra kirjeldamine koosneb kahest dokumendist.",
+          "Esimene on infosüsteemi ülevaade — lühike, kergesti loetav kokkuvõte, mis on mõeldud juhtkonnale ja partneritele. See sisaldab põhiteadmisi süsteemist, ülevaatlikku skeemi ja IT-organisatsiooni iseloomustust. See on dokument, mida saab anda uuele IT-partnerile ja ta saab kiiresti pildi sellest, mis koolil on.",
+          "Teine on põhjalik hetkeolukorra kirjeldus — see on detailsem komplekt, mis sisaldab kuut kohustuslikku elementi. Vaatame neid lähemalt."
+        ],
+        /* 13 */ [
+          "Hetkeolukorra kirjeldus peab katma täpselt kuut elementi.",
+          "Esimene — kasutatavad IT-lahendused: kõik tarkvara, riistvara ja teenused, mida kool kasutab. Kui see loend puudub, ei tea keegi täielikku pilti.",
+          "Teine — töös olevad projektid: mis arendustegevused on praegu käimas. See väldib olukorda, kus paralleelselt tehakse sama tööd.",
+          "Kolmas — IT-rollide jaotus koolis: kes mida haldab, kes mille eest vastutab. Kui see puudub, tekib olukord, kus kõik arvavad, et keegi teine lahendab probleemi.",
+          "Neljas — ülevaade andmetest ja nende liikumisest, sh infoturbe aspektid. Kus on õpilaste isikuandmed? Kes neile ligi pääseb?",
+          "Viies — hooldus- ning arenduspartnerid ja nende vastutusalad: kellega tehakse koostööd ja mille osas.",
+          "Kuues — oluline dokumentatsioon, sh põhiloendid: milliseid IT-loendeid ja dokumente on olemas. See on tegelikult üks olulisemaid — paljudes koolides ei ole midagi kirja pandud ja kui IT-inimene lahkub, kaob teadmine koos temaga."
+        ],
+        /* 14 */ [
+          "Kolmas etapp on tegevuste kirjeldamine. Arengukava peab katma mitmeid teemasid — vaatame esimesed neli.",
+          "Esimene teema on arendusprioriteedid ja eeldused — see on arengukava kõige olulisem osa, kus loeteleme kolme aasta tähtsamad projektid tähtsuse järjekorras. Näiteks: esimene prioriteet on uue arvutiklassi loomine, teine on e-päeviku juurutamine. Lisaks kirjeldatakse eeldused — mida on vaja, et need prioriteedid ellu viia: lisarahastamine, juhtkonna tugi, koostööpartnerid.",
+          "Teine teema on infosüsteem aastal XXXX — visuaalne ülevaade sellest, milline näeb infosüsteem välja arengukava lõpuks. See on nagu sihtpildi joonistamine — mis süsteemid on olemas, kuidas need on ühendatud.",
+          "Kolmas teema on IT-organisatsioon ja juhtimine — rollide jaotus, vastutus, koordineerimine, ja kui palju teenuseid ostetakse sisse.",
+          "Neljas teema on infrastruktuuri visioon — serverid, võrk, toimepidevuse tagamine ja mõõdikud. Näiteks mõõdik: infosüsteemi rikked ei põhjusta töö seiskumist tööajal rohkem kui kaks tundi."
+        ],
+        /* 15 */ [
+          "Jätkame arengukava teemadega.",
+          "Viies teema on kasutajatoe visioon. See kirjeldab, kuidas tehnilist tuge pakutakse — millal, kellele ja millisel kiirusel probleemid lahendatakse. Näiteks: kasutajatuge pakutakse tööpäevadel 9–17, peetakse töö register, ja viga või probleem lahendatakse kahe tööpäeva jooksul. Need on mõõdetavad lubadused, millele töötajad saavad toetuda.",
+          "Kuues teema on arenduse visioon — kuidas arendustegevusi juhitakse ja kes vastutab.",
+          "Seitsmes teema on infoturbe visioon — riskid, turvameetmed, seire ja mõõdikud. Näiteks: turbeintsidente ei ole aastas rohkem kui kaks korda.",
+          "Kaheksas on tegevuskava — see jaguneb kaheks: vältimatud tegevused, millega alustatakse kohe, ja planeeritud tegevused kaheks aastaks.",
+          "Lisaks on investeeringute kava, kus iga investeering saab oma hinnangu. Kõik need teemad koos moodustavad täieliku IT arengukava."
+        ],
+        /* 16 */ [
+          "Räägime tegevuskavast veidi detailsemalt.",
+          "Tegevuskava jaguneb kaheks osaks.",
+          "Esimene osa on vältimatud tegevused — need on asjad, mis on IT jätkusuutlikkuse ja turvalisuse mõttes kriitilised ja millega tuleb alustada kohe. Näiteks: tagavarakoopia süsteemi juurutamine, tarkvara litsentside korrastamine, võrgu turvamine. Need ei ole soovid — need on kohustused.",
+          "Teine osa on planeeritud tegevused — need on järjestatud tähtsuse järjekorras järgmise kahe aasta jooksul tegemiseks.",
+          "Iga tegevuse juures dokumenteeritakse kolm asja: mõõdetavad tulemused — kuidas teame, et see on tehtud; olulisemad eeldused — mida on vaja, et see õnnestuks; ja praktilised näpunäited — mida tasub silmas pidada.",
+          "Investeeringute näide raamatust: e-posti server — riistvara 2500 eurot, tarkvara litsents 1000 eurot, serverilitsents 500 eurot, kokku 4000 eurot. Nii täpsed kuluhinnangud aitavad eelarvet planeerida."
+        ],
+        /* 17 */ [
+          "Arengukava ei ole dokument, mida tehakse ühe korra ja unustatakse.",
+          "Raamat rõhutab: arengukava tuleb regulaarselt üle vaadata. Ülevaatamine toimub kahel tasandil.",
+          "Esiteks iga-aastane ülevaatus — igal aastal vaadatakse üle eelmise aasta tegevused: kas saavutati eesmärgid? Mis läks hästi, mis halvasti? Ja kirjeldatakse järgmise kahe aasta tegevused. See on jooksev juhtimine.",
+          "Teiseks põhjalik ülevaatus iga kolme aasta tagant — siis vaadatakse kogu arengukava uuesti üle, uuendatakse visiooni ja strateegilisi eesmärke.",
+          "Miks see oluline on? Kuna tehnoloogia muutub kiiresti, muutuvad ka koolide vajadused. Kolm aastat tagasi ei eksisteerinud paljud lahendused, mis täna on standardsed.",
+          "Arengukava peab olema paindlik ja kohanema uue olukorraga. See on elav dokument — pidev tsükkel planeerimisest, elluviimisest ja hindamisest."
+        ],
+        /* 18 */ [
+          "Vaatame nüüd üht konkreetset näidet raamatust.",
+          "Ahtme Gümnaasium on põhikool-gümnaasium Ida-Virumaal, kus töötab 83 õpetajat ja õpib 662 õpilast.",
+          "See kool on hea näide süsteemsest IT-arendamisest. Nende visioon on olla loominguline laboratoorium, kus töötatakse välja uut õppesisu ja uusi õppevorme.",
+          "Kool alustas informaatika tundide läbiviimist juba 1980ndate lõpus ja esimene infojuht asus tööle 1989. aastal — see on üle 35 aasta kogemust! Paljud koolid ei ole tänaseni nii kaugele jõudnud.",
+          "Koolil on robootikaring, erinevad õpiriistvara lahendused ning süsteemne õpetajate koolitamine.",
+          "Edutegurid on selged: juhtkonna eestvedamine ja innovatsioonile suunatud koolikultuur. See näide illustreerib, mida pikaajaline süsteemne planeerimine saavutada suudab — kool on jõudnud sellesse punkti tänu järjepidevusele, mitte ühekordsele projektile."
+        ],
+        /* 19 */ [
+          "Kokkuvõtteks — mida me täna õppisime?",
+          "Esiteks, IT arengukava on 3–5-aastane strateegiline dokument koos 2-aastase tegevusplaaniga.",
+          "Teiseks, planeerimine algab vajaduste kaardistamisest — kaasata tuleb kõik huvigrupped, mitte ainult IT-inimesed.",
+          "Kolmandaks, enne tulevikku planeerimist tuleb hästi tunda hetkeolukorda — selleks on 6-elemendiline hetkeolukorra kirjelduse komplekt.",
+          "Neljandaks, arengukava peab katma kõik valdkonnad: taristu, kasutajatoe, infoturbe ja arenduse visioon.",
+          "Viiendaks, arengukava vajab regulaarset ülevaatust — igal aastal jooksev ülevaatus ja iga 3 aasta tagant põhjalik ülevaatus.",
+          "Ja kuuendaks — edu aluseks on juhtkonna tugi, süsteemne lähenemine ja kogukonna kaasamine. Need põhimõtted kehtivad olenemata kooli suurusest."
+        ],
+        /* 20 */ [
+          "See on meie ettekande lõpp.",
+          "Aitäh tähelepanu eest! Oleme käsitlenud IT arengu juhtimist ja IT arengukava koostamist Eesti koolides.",
+          "Loodame, et see andis hea ülevaate sellest, miks planeerimine on oluline ja kuidas seda praktiliselt teha.",
+          "Kui teil on küsimusi — oleme valmis vastama.",
+          "Järgmisena tulevad Olga ja Andre, kes käsitlevad IT-kulude planeerimist ja IT eelarve näidet. Palun!"
+        ]
+      ];
+
+      /* ── Inject ⓘ button into every slide ────────────────── */
+      $('.slide').each(function (i) {
+        $(this).append(
+          $('<button>')
+            .addClass('info-btn absolute bottom-4 right-4 w-8 h-8 rounded-full bg-black/10 hover:bg-black/20 text-white/70 hover:text-white flex items-center justify-center text-sm font-bold transition-all z-10')
+            .attr('data-slide', i)
+            .text('i')
+        );
+        // ensure slide has relative positioning for the absolute button
+        $(this).addClass('relative');
+      });
+
+      /* ── Script panel logic ───────────────────────────────── */
+      var panelOpen = false;
+
+      function openPanel(idx) {
+        var lines = scripts[idx] || ['Skript puudub.'];
+        var html  = lines.map(function (l) {
+          return '<p class="border-l-2 border-[#3CBFB8]/30 pl-3">' + l + '</p>';
+        }).join('');
+        $('#script-body').html(html);
+        $('#script-panel').addClass('open').css('pointer-events', 'all');
+        panelOpen = true;
+      }
+
+      function closePanel() {
+        $('#script-panel').removeClass('open').css('pointer-events', 'none');
+        panelOpen = false;
+      }
+
+      $(document).on('click', '.info-btn', function (e) {
+        e.stopPropagation();
+        var idx = parseInt($(this).attr('data-slide'));
+        if (panelOpen) { closePanel(); } else { openPanel(idx); }
+      });
+
+      $('#close-script').on('click', closePanel);
+
+      /* ── Slide navigation ─────────────────────────────────── */
+      var $slides = $('.slide');
+      var total   = $slides.length;
+      var cur     = 0;
+
+      $('#tot').text(total);
+
+      function go(n) {
+        if (n < 0 || n >= total) return;
+        $slides.eq(cur).removeClass('active');
+        cur = n;
+        $slides.eq(cur).addClass('active');
+        $('#cur').text(cur + 1);
+        $('#progress').css('width', ((cur + 1) / total * 100) + '%');
+        $('#btn-prev').prop('disabled', cur === 0);
+        $('#btn-next').text(cur === total - 1 ? 'Lõpp' : 'Järgmine →')
+                      .prop('disabled', cur === total - 1);
+        if (panelOpen) openPanel(cur);
+      }
+
+      /* ── Cooldown ─────────────────────────────────────────── */
+      var COOLDOWN   = 1000;
+      var onCooldown = false;
+      var $coolBar   = $('<div>')
+        .addClass('fixed bottom-14 left-0 h-0.5 bg-[#3CBFB8]/50 z-50 transition-none')
+        .css('width', '0')
+        .appendTo('body');
+
+      function startCooldown() {
+        onCooldown = true;
+        $('#btn-prev, #btn-next').addClass('opacity-50 cursor-not-allowed');
+        $coolBar.css({ transition: 'none', width: '100%' });
+        // shrink bar over COOLDOWN ms
+        setTimeout(function () {
+          $coolBar.css({ transition: 'width ' + COOLDOWN + 'ms linear', width: '0' });
+        }, 20);
+        setTimeout(function () {
+          onCooldown = false;
+          $('#btn-prev, #btn-next').removeClass('opacity-50 cursor-not-allowed');
+        }, COOLDOWN);
+      }
+
+      /* ── Navigation ───────────────────────────────────────── */
+      $('#btn-next').on('click', function () { go(cur + 1); });
+      $('#btn-prev').on('click', function () { go(cur - 1); });
+
+      /* ── Page-jump ────────────────────────────────────────── */
+      var jumpOpen = false;
+
+      function openJump() {
+        jumpOpen = true;
+        $('#page-jump-total').text('/ ' + total);
+        $('#page-input').val('');
+        $('#page-jump').css('display', 'flex');
+        setTimeout(function () { $('#page-input').trigger('focus'); }, 50);
+      }
+
+      function closeJump() {
+        jumpOpen = false;
+        $('#page-jump').css('display', 'none');
+      }
+
+      $('#page-jump').on('click', function (e) {
+        if ($(e.target).is('#page-jump')) closeJump();
+      });
+
+      $('#page-input').on('keydown', function (e) {
+        var allowed = ['Backspace','Delete','ArrowLeft','ArrowRight','Tab','Enter','Escape'];
+        if (!allowed.includes(e.key) && !/^[0-9]$/.test(e.key)) {
+          e.preventDefault();
+        }
+        if (e.key === 'Enter') {
+          var n = parseInt($(this).val(), 10) - 1;
+          if (isNaN(n) || n < 0 || n >= total) {
+            $(this).addClass('border-red-400').val('');
+            setTimeout(function () { $('#page-input').removeClass('border-red-400'); }, 600);
+            return;
+          }
+          closeJump();
+          if (n !== cur) go(n);
+        } else if (e.key === 'Escape') {
+          closeJump();
+        }
+      });
+
+      /* ── Global keydown ───────────────────────────────────── */
+      $(document).on('keydown', function (e) {
+        // page-jump takes full keyboard control when open
+        if (jumpOpen) return;
+
+        if (e.key === 'p' || e.key === 'P') {
+          e.preventDefault();
+          openJump();
+          return;
+        }
+        if (e.key === 'Escape') { closePanel(); return; }
+
+        if (onCooldown) return;
+
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+          e.preventDefault(); go(cur + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault(); go(cur - 1);
+        }
+      });
+
+      /* ── Patch go() to enforce cooldown ──────────────────── */
+      var _go = go;
+      go = function (n) {
+        if (onCooldown && Math.abs(n - cur) === 1) return; // block arrow/button spam
+        _go(n);
+        startCooldown();
+      };
+
+      go(0);
+    });
+  </script>
+
+</body>
+</html>
