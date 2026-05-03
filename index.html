@@ -765,28 +765,6 @@
         if (panelOpen) openPanel(cur);
       }
 
-      /* ── Cooldown ─────────────────────────────────────────── */
-      var COOLDOWN   = 1000;
-      var onCooldown = false;
-      var $coolBar   = $('<div>')
-        .addClass('fixed bottom-14 left-0 h-0.5 bg-[#3CBFB8]/50 z-50 transition-none')
-        .css('width', '0')
-        .appendTo('body');
-
-      function startCooldown() {
-        onCooldown = true;
-        $('#btn-prev, #btn-next').addClass('opacity-50 cursor-not-allowed');
-        $coolBar.css({ transition: 'none', width: '100%' });
-        // shrink bar over COOLDOWN ms
-        setTimeout(function () {
-          $coolBar.css({ transition: 'width ' + COOLDOWN + 'ms linear', width: '0' });
-        }, 20);
-        setTimeout(function () {
-          onCooldown = false;
-          $('#btn-prev, #btn-next').removeClass('opacity-50 cursor-not-allowed');
-        }, COOLDOWN);
-      }
-
       /* ── Navigation ───────────────────────────────────────── */
       $('#btn-next').on('click', function () { go(cur + 1); });
       $('#btn-prev').on('click', function () { go(cur - 1); });
@@ -842,22 +820,12 @@
         }
         if (e.key === 'Escape') { closePanel(); return; }
 
-        if (onCooldown) return;
-
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
           e.preventDefault(); go(cur + 1);
         } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
           e.preventDefault(); go(cur - 1);
         }
       });
-
-      /* ── Patch go() to enforce cooldown ──────────────────── */
-      var _go = go;
-      go = function (n) {
-        if (onCooldown && Math.abs(n - cur) === 1) return; // block arrow/button spam
-        _go(n);
-        startCooldown();
-      };
 
       go(0);
     });
